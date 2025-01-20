@@ -5,11 +5,11 @@ import { Plus, Menu, User } from 'lucide-react'
 import { Conversation } from '@/types'
 import { useChatStore } from '@/stores/chat'
 
-interface SidebarProps {
-  conversations: Conversation[]
-  onSelectConversation: (conversation: Conversation) => void
-  currentConversationId: string
-}
+// interface SidebarProps {
+//   conversations: Conversation[]
+//   onSelectConversation: (conversation: Conversation) => void
+//   currentConversationId: string
+// }
 
 export function Sidebar() {
   const { conversations, currentConversationId, setCurrentConversationId } = useChatStore()
