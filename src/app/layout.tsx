@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
 
 import './globals.css';
+import { AuthInitializer } from '@/components/auth/auth-initializer';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
@@ -28,7 +29,9 @@ export default async function RootLayout({
       <body className="antialiased">
 
         <Toaster position="top-center" />
-        {children}
+        <AuthInitializer>
+          {children}
+        </AuthInitializer>
 
       </body>
     </html>
