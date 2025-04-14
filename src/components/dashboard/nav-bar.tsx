@@ -3,14 +3,20 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { SignOutButton } from "@/components/auth/sign-out-button"
-import { LayoutDashboard, Settings, User } from "lucide-react"
+import { UserButton } from "@/components/dashboard/user-button"
+import { LayoutDashboard, Settings, User, FileText } from "lucide-react"
+import ModeToggle from "@/components/mode-toggle"
 
 const navItems = [
   {
     title: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Files",
+    href: "/dashboard/files",
+    icon: FileText,
   },
   {
     title: "Profile",
@@ -30,7 +36,7 @@ export function NavBar() {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4 container mx-auto">
-        <div className="mr-4 font-bold text-xl">MyApp</div>
+        <div className="mr-4 font-bold text-xl">CloudChat</div>
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
           {navItems.map((item) => (
             <Link
@@ -46,11 +52,11 @@ export function NavBar() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto">
-          <SignOutButton />
+        <div className="ml-auto flex items-center space-x-4">
+          <ModeToggle />
+          <UserButton />
         </div>
       </div>
     </div>
   )
 }
-

@@ -1,6 +1,7 @@
 import type React from "react"
-import { AuthGuard } from "@/components/auth/auth-guard"
 import { NavBar } from "@/components/dashboard/nav-bar"
+import { AuthGuard } from "@/components/auth/auth-guard"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DashboardLayout({
   children,
@@ -9,11 +10,12 @@ export default function DashboardLayout({
 }) {
   return (
     <AuthGuard>
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-1">{children}</main>
-      </div>
+      <SidebarProvider>
+        <div className="min-h-screen flex flex-col bg-background">
+          <NavBar />
+          <main className="flex w-screen">{children}</main>
+        </div>
+      </SidebarProvider>
     </AuthGuard>
   )
 }
-

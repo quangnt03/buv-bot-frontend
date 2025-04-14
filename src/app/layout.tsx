@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 
 import './globals.css';
 import { AuthInitializer } from '@/components/auth/auth-initializer';
+import { QueryProvider } from '@/providers/query-provider';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
@@ -30,7 +31,9 @@ export default async function RootLayout({
 
         <Toaster position="top-center" />
         <AuthInitializer>
-          {children}
+          <QueryProvider>
+            {children}
+          </QueryProvider>
         </AuthInitializer>
 
       </body>
