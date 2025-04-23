@@ -91,9 +91,6 @@ import {
       cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (session: CognitoUserSession) => {
           // Store tokens in cookies
-          console.log(session.getIdToken().getJwtToken())
-          console.log(session.getAccessToken().getJwtToken())
-          console.log(session.getRefreshToken().getToken())
           storeTokens(
             session.getIdToken().getJwtToken(),
             session.getAccessToken().getJwtToken(),
@@ -177,6 +174,67 @@ import {
         })
       })
     })
+  }
+  
+  // Change user attribute (like name)
+  export const changeUserAttribute = (attributeName: string, attributeValue: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = userPool.getCurrentUser();
+      
+      if (!cognitoUser) {
+        reject(new Error("No authenticated user found"));
+        return;
+      }
+      
+      cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        
+        const attributes = [
+          new CognitoUserAttribute({
+            Name: attributeName,
+            Value: attributeValue
+          })
+        ];
+        
+        cognitoUser.updateAttributes(attributes, (err, result) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      });
+    });
+  }
+  
+  // Change password for an authenticated user
+  export const changePassword = (oldPassword: string, newPassword: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = userPool.getCurrentUser();
+      
+      if (!cognitoUser) {
+        reject(new Error("No authenticated user found"));
+        return;
+      }
+      
+      cognitoUser.getSession((err: Error | null, session: CognitoUserSession) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        
+        cognitoUser.changePassword(oldPassword, newPassword, (err, result) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      });
+    });
   }
   
   // Sign out the current user

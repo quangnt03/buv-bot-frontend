@@ -16,6 +16,11 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
+  // If there are no pages or only one page, don't render pagination
+  if (totalPages <= 1) {
+    return null
+  }
+
   return (
     <ShadcnPagination>
       <PaginationContent>

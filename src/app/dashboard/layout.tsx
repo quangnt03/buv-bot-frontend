@@ -1,7 +1,9 @@
 import type React from "react"
 import { NavBar } from "@/components/dashboard/nav-bar"
 import { AuthGuard } from "@/components/auth/auth-guard"
+import { Sidebar } from "@/components/dashboard/sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function DashboardLayout({
   children,
@@ -10,12 +12,17 @@ export default function DashboardLayout({
 }) {
   return (
     <AuthGuard>
-      <SidebarProvider>
-        <div className="min-h-screen flex flex-col bg-background">
-          <NavBar />
-          <main className="flex w-screen">{children}</main>
-        </div>
-      </SidebarProvider>
+      <div className="flex h-screen overflow-hidden w-full">
+        <SidebarProvider>
+          <Sidebar />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <main className="flex-1 overflow-auto">
+              <NavBar /> 
+              {children}
+            </main>
+          </div>
+        </SidebarProvider>
+      </div>
     </AuthGuard>
   )
 }

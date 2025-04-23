@@ -1,3 +1,4 @@
+import { metadata } from '../app/layout';
 // Common types
 export interface ValidationError {
     loc: (string | number)[]
@@ -11,15 +12,14 @@ export interface HTTPValidationError {
 
 // Item types
 export interface Item {
-    id: string
+    uri: string
+    owner_id: string
+    last_updated: string
     file_name: string
+    id: string
     mime_type: string
-    size: number
-    created_at: string
-    updated_at: string
-    active: boolean
     conversation_id?: string
-    user_id: string
+    active: boolean
 }
 
 export interface ItemUpdate {
@@ -27,10 +27,8 @@ export interface ItemUpdate {
     active?: boolean | null
 }
 
-export interface ItemsResponse {
-    items: Item[]
-    total: number
-}
+// Update ItemsResponse to be an array of Items to match the actual API response
+export type ItemsResponse = Item[]
 
 export interface ItemResponse {
     item: Item
@@ -85,18 +83,19 @@ export interface Reference {
 }
 
 export interface ChatResponse {
-    message: Message
+    is_dummy_stream: boolean
+    metadata: Object | null
+    message: string
+    source_nodes: Array<Object>
+    sources: Array<Object>
 }
 
-export interface ChatHistoryResponse {
-    messages: Message[]
-    total: number
-}
+export type ChatHistoryResponse = Message[]
 
 // Upload types
 export interface DriveUrl {
-    url: string
-    conversation_id?: string
+    driver_id: string
+    conversation_id: string
 }
 
 export interface UploadResponse {

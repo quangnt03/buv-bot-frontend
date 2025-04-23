@@ -1,8 +1,11 @@
 import { getAccessToken } from "@/lib/cognito-token"
+import { toast } from "@/hooks/use-toast"
+import { signOut } from "@/lib/cognito"
 
 export type ApiMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
 
 interface ApiCallOptions<TBody = unknown> {
+  baseUrl: string | undefined
   method: ApiMethod
   path: string
   body?: TBody
@@ -30,9 +33,25 @@ export class ApiError extends Error {
 }
 
 // Base API URL - to be filled in later
-const API_BASE_URL = 'http://localhost:8000/'
+
+// Create a function for handling session expiry
+const handleSessionExpiry = () => {
+  // Show toast notification
+  toast({
+    variant: "destructive",
+    title: "Authentication Error",
+    description: "Your session is invalid or expired. Please login again",
+  })
+  
+  // Log user out
+  signOut()
+  
+  // Redirect to login page
+  window.location.href = "/auth/signin" // Using window.location for a hard redirect
+}
 
 export async function makeApiCall<TResponse, TBody = unknown>({
+  baseUrl,
   method,
   path,
   body,
@@ -41,8 +60,7 @@ export async function makeApiCall<TResponse, TBody = unknown>({
   requiresAuth = true,
 }: ApiCallOptions<TBody>): Promise<ApiResponse<TResponse>> {
   // Construct URL with query parameters
-  const url = new URL(`${API_BASE_URL}${path}`)
-  
+  const url = new URL(`${baseUrl}/${path}`)
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined) {
@@ -50,8 +68,6 @@ export async function makeApiCall<TResponse, TBody = unknown>({
       }
     })
   }
-  console.log(url)
-
   // Prepare headers
   const requestHeaders: HeadersInit = {
     "Content-Type": "application/json",
@@ -80,7 +96,6 @@ export async function makeApiCall<TResponse, TBody = unknown>({
 
   try {
     const response = await fetch(url.toString(), requestOptions)
-
     // Parse response data
     let data
     const contentType = response.headers.get("content-type")
@@ -90,7 +105,13 @@ export async function makeApiCall<TResponse, TBody = unknown>({
       data = await response.text()
     }
 
-    // Handle error responses
+    // Handle authentication errors (401/403)
+    if (response.status === 401 || response.status === 403) {
+      handleSessionExpiry()
+      throw new ApiError("Authentication error", response.status, data)
+    }
+
+    // Handle other error responses
     if (!response.ok) {
       throw new ApiError(`API error: ${response.status} ${response.statusText}`, response.status, data)
     }
@@ -101,6 +122,12 @@ export async function makeApiCall<TResponse, TBody = unknown>({
       ok: response.ok,
     }
   } catch (error) {
+    // If it's already an ApiError and it's an auth error, don't throw again
+    if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+      throw error
+    }
+
+    // If it's another type of ApiError, throw it normally
     if (error instanceof ApiError) {
       throw error
     }

@@ -14,49 +14,44 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Files",
-    href: "/dashboard/files",
-    icon: FileText,
-  },
-  {
     title: "Profile",
     href: "/dashboard/profile",
     icon: User,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
+  }
 ]
 
 export function NavBar() {
   const pathname = usePathname()
 
   return (
-    <div className="border-b">
-      <div className="flex h-16 items-center px-4 container mx-auto">
-        <div className="mr-4 font-bold text-xl">CloudChat</div>
-        <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary flex items-center",
-                pathname === item.href ? "text-primary" : "text-muted-foreground",
-              )}
-            >
-              <item.icon className="h-4 w-4 mr-2" />
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-        <div className="ml-auto flex items-center space-x-4">
-          <ModeToggle />
+    <nav className="border-b">
+      <div className="flex h-16 items-center px-4 max-w-full">
+        {/* All navigation items with some space on the left */}
+        <div className="flex items-center gap-6 ml-4">
+          {navItems.map((item, index) => {
+            const isActive = pathname === item.href
+            return (
+              <Link 
+                key={index}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-2 whitespace-nowrap",
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
+                )}
+              >
+                <item.icon className="h-4 w-4" />
+                {item.title}
+              </Link>
+            )
+          })}
+        </div>
+        
+        {/* Only user controls on the right */}
+        <div className="ml-auto flex items-center gap-4">
+          {/* <ModeToggle /> */}
           <UserButton />
         </div>
       </div>
-    </div>
+    </nav>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { LogOut, Settings, User, HelpCircle } from "lucide-react"
 import {
@@ -32,14 +32,13 @@ export function UserButton() {
       setIsSigningOut(false)
     }
   }
-
   // Use placeholder data if user is not available
-  const userName = user?.username || "John Doe"
-  const userEmail = user?.email || "john.doe@example.com"
+  const userName = user?.name 
+  const userEmail = user?.email
   // Get initials for avatar fallback
   const initials = userName
-    .split(" ")
-    .map((name) => name[0])
+    ?.split(" ")
+    .map((name: string) => name[0])
     .join("")
     .toUpperCase()
     .substring(0, 2)

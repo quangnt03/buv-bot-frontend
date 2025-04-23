@@ -1,41 +1,35 @@
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import { SidebarToggle } from "@/components/ui/sidebar-toggle"
 
 import './globals.css';
 import { AuthInitializer } from '@/components/auth/auth-initializer';
 import { QueryProvider } from '@/providers/query-provider';
+import { SidebarProvider } from '@/components/ui/sidebar'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Next.js Chatbot Template',
-  description: 'Next.js chatbot template using the AI SDK.',
+  title: 'CloudChat',
+  description: 'Document intelligence platform',
 };
 
-export const viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
-};
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
-  return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-    >
-      <head>
-      </head>
-      <body className="antialiased">
+}
 
-        <Toaster position="top-center" />
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html lang="en">
+      <body>
+        <Toaster position="top-center" richColors />
+
         <AuthInitializer>
           <QueryProvider>
-            {children}
+            <SidebarProvider>
+              <SidebarToggle />
+              {children}
+            </SidebarProvider>
           </QueryProvider>
         </AuthInitializer>
-
       </body>
     </html>
   );

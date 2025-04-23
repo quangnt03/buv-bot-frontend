@@ -4,12 +4,15 @@ import {
   signIn as cognitoSignIn,
   signOut as cognitoSignOut,
   getCurrentUser as cognitoGetCurrentUser,
+  changeUserAttribute as cognitoChangeUserAttribute,
+  changePassword as cognitoChangePassword,
 } from "@/lib/cognito"
 import { storeTokens, clearTokens, getAccessToken, getIdToken } from "@/lib/cognito-token"
 
 interface User {
   username: string
   email: string
+  name?: string
   [key: string]: any
 }
 
@@ -27,6 +30,8 @@ interface AuthActions {
   signOut: () => void
   refreshUser: () => Promise<void>
   setError: (error: string | null) => void
+  changeUserName: (newName: string) => Promise<void>
+  changeUserPassword: (oldPassword: string, newPassword: string) => Promise<void>
 }
 
 // Create the store with persist middleware
@@ -135,6 +140,56 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       setError: (error) => {
         set({ error })
+      },
+      
+      // Change user name using Cognito
+      changeUserName: async (newName: string) => {
+        try {
+          set({ isLoading: true, error: null })
+          
+          // Call Cognito to update name attribute
+          await cognitoChangeUserAttribute('name', newName)
+          
+          // Refresh user data to get updated attributes
+          const userData = await cognitoGetCurrentUser()
+          
+          // Update state with new user data
+          set({
+            user: userData,
+            isLoading: false,
+          })
+          
+          return Promise.resolve()
+        } catch (error) {
+          console.error("Change user name error:", error)
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : "Failed to update name",
+          })
+          return Promise.reject(error)
+        }
+      },
+      
+      // Change password using Cognito
+      changeUserPassword: async (oldPassword: string, newPassword: string) => {
+        try {
+          set({ isLoading: true, error: null })
+          
+          // Call Cognito to change password
+          await cognitoChangePassword(oldPassword, newPassword)
+          
+          // Update state
+          set({ isLoading: false })
+          
+          return Promise.resolve()
+        } catch (error) {
+          console.error("Change password error:", error)
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : "Failed to change password",
+          })
+          return Promise.reject(error)
+        }
       },
     }),
     {

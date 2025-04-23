@@ -35,7 +35,6 @@ export const clearTokens = () => {
   localStorage.removeItem("user")
   sessionStorage.removeItem("authState")
 
-  console.log("All authentication tokens cleared")
 }
 
 // Create an authenticated fetch function that includes the token
