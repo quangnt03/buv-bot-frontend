@@ -84,10 +84,10 @@ export interface Reference {
 
 export interface ChatResponse {
     is_dummy_stream: boolean
-    metadata: Object | null
+    metadata: object | null
     message: string
-    source_nodes: Array<Object>
-    sources: Array<Object>
+    source_nodes: Array<object>
+    sources: Array<object>
 }
 
 export type ChatHistoryResponse = Message[]

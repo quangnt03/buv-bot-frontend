@@ -1,14 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import { MainContent } from "@/components/dashboard/main-content"
 import { useSidebar } from "@/components/ui/sidebar"
 import { PanelLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function DashboardPage() {
-  const [searchValue, setSearchValue] = useState("")
-  const [selectedFilter, setSelectedFilter] = useState("All")
   const { state: sidebarState, toggleSidebar } = useSidebar()
 
   return (

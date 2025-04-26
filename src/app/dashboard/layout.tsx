@@ -3,7 +3,6 @@ import { NavBar } from "@/components/dashboard/nav-bar"
 import { AuthGuard } from "@/components/auth/auth-guard"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function DashboardLayout({
   children,

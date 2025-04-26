@@ -3,14 +3,12 @@ import type { ChatHistoryResponse, ChatRequest, ChatResponse, Message } from "@/
 
 export const chatService = {
   sendMessage: async (data: ChatRequest): Promise<ChatResponse> => {
-    console.log("Sending message to chat service", data)
     const response = await makeApiCall<ChatResponse, ChatRequest>({
       baseUrl: process.env.NEXT_PUBLIC_CHAT_SERVICE_URL,
       method: "POST",
       path: "api/v1/chat",
       body: data,
     })
-    console.log("Response from chat service", response)
     return response.data
   },
 
@@ -21,7 +19,6 @@ export const chatService = {
       path: `api/v1/chat/history/${conversationId}`,
       params: { limit },
     })
-    console.log("Response from chat history", response)
     return response.data
   },
 

@@ -19,7 +19,7 @@ import { FolderItem } from "@/components/dashboard/folder-item"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useConversationStore } from "@/store/conversation-store"
 import { useConversations } from "@/hooks/use-conversations"
-import { useItem } from "@/hooks/use-items"
+import { useItemsByConversationId } from "@/hooks/use-items"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CreateConversationDialog } from "@/components/dashboard/create-conversation-dialog"
 
@@ -33,10 +33,8 @@ export function Sidebar() {
   // Get state from Zustand stores
   const { conversations, selectConversation, selectedConversationId } = useConversationStore()
 
-  // Fetch items for selected conversation
-  const { isLoading: isLoadingItems } = useItem(
-    selectedConversationId ? { conversation_id: selectedConversationId } : undefined,
-  )
+  // Fetch items for selected conversation - use useItemsByConversationId which takes a string parameter
+  const { isLoading: isLoadingItems } = useItemsByConversationId(selectedConversationId || undefined)
 
   // Auto-select first conversation if none is selected
   useEffect(() => {

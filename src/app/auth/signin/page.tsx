@@ -21,11 +21,8 @@ export default function SignInPage() {
             Forgot your password?
           </Link>
         </p>
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <Link href="/auth/signup" className="hover:text-brand underline underline-offset-4">
-            Sign up
-          </Link>
+        <p className="text-sm text-muted-foreground mt-2">
+          Don&apos;t have an account? <Link href="/auth/signup" className="text-blue-500 hover:underline">Sign up</Link>
         </p>
       </div>
     </div>

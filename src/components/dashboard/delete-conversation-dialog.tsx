@@ -15,6 +15,10 @@ import { useEffect, useRef, useState } from "react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { Trash } from "lucide-react"
+import { toast } from "sonner"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { useDeleteConversation } from "@/hooks/use-conversations"
 
 interface DeleteConversationDialogProps {
   open: boolean
@@ -74,7 +78,7 @@ export function DeleteConversationDialog({
                 <Alert variant="destructive" className="mt-2">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    <strong>Action Blocked:</strong> The folder "{folderName}" contains items and cannot be deleted.
+                    <strong>Action Blocked:</strong> The folder &quot;{folderName}&quot; contains items and cannot be deleted.
                   </AlertDescription>
                 </Alert>
                 <p className="mt-4">
